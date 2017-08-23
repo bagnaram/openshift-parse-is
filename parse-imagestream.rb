@@ -4,7 +4,7 @@ require 'json'
 require 'pp'
 
 streams = ['/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/xpaas-streams/jboss-image-streams.json', 
-           '/usr/shadre/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/xpaas-streams/fis-image-streams.json',
+           '/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/xpaas-streams/fis-image-streams.json',
            '/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/image-streams/image-streams-rhel7.json']
 
 streams.each do |stream|
