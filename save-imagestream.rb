@@ -17,8 +17,9 @@ OptionParser.new do |opts|
 end.parse!
 
 
+streams=[]
 
-options[:fname] != NIL ? streams = options[:fname] : streams = ['is.txt'] 
+options[:fname] != NIL ? streams = options[:fname] : streams << ['is.txt'] 
 options[:n] != NIL ? n = options[:n] : n=10
 options[:output] != NIL ? output = options[:output] : output="./isdump"
 
