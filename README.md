@@ -1,5 +1,13 @@
 # Dumps a list of required images for an installed version of OpenShift
 
+### Requirements
+Machine that you run this script from must:
+* Have sufficient storage for saving images
+* Have Docker installed along with sufficient docker storage for all the images.
+* Be subscribed to the appropriate OpenShift yum repositories
+* Have openshift-ansible RPM installed
+* Have a recent install of Ruby
+
 ### Directions
 ```
 Usage: save-images.rb [options]
