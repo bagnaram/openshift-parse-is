@@ -1,14 +1,15 @@
 #!/usr/bin/ruby
 require 'rubygems'
-require 'pp'
 require 'optparse'
+require 'pp'
+require_relative 'imageStreamParser'
 
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: save-images.rb [options]"
 
   opts.on('-n', '--number COUNT=10', Integer,  'Number of images per tarball.') { |v| options[:n] = v }
-  opts.on('-f', '--filename FNAME=is.txt', 'File containing image names') { |v| options[:fname] = v }
+  opts.on('-f', '--filename FNAME', 'File containing image names. Defaults to running imageStreamParser.') { |v| options[:fname] = v }
   opts.on('-o', '--output FNAME=./isdumpN', 'File to output tarballs') { |v| options[:output] = v }
   opts.on('-d', '--dryrun', 'Just output commands, don\'t run.') { options[:dryrun] = true }
   opts.on('-v', '--verbose', 'Verbose output') { options[:verbose] = true }
@@ -18,8 +19,7 @@ end.parse!
 
 
 streams=[]
-
-options[:fname] != NIL ? streams = options[:fname] : streams << ['is.txt'] 
+options[:fname] != NIL ? streams << options[:fname] : streams=[]
 options[:n] != NIL ? n = options[:n] : n=10
 options[:output] != NIL ? output = options[:output] : output="./isdump"
 
@@ -30,41 +30,55 @@ streams.each do |stream|
   end
 end
 
-counter=0
 
 imagestreams = [];
-file = File.new(streams[0],'r')
-while (line = file.gets)
+if streams==[] then
+  parser = ImageStreamParser.new
+  if parser.verifyStreams() then
+    imagestreams = parser.dumpStreams(tty=false)
+  else
+    exit
+  end
 
-  imagestreams.push(line)
-  #puts "#{counter}: #{line}"
+else
+  file = File.new(streams[0],'r')
+  while (line = file.gets)
+    imagestreams.push(line)
+  end
+  file.close
+end
 
-  counter = counter + 1
+ 
+i = 0
+c=1.0
+cmd = ""
+cmd2 = ""
+cmd3 = ""
+imagestreams.each do | line |
 
-  if (counter % n == 0) then
-    printf("Creating tarball %d: isdump%d.tar.gz\n", counter/n, counter/n);
-    cmd = "docker save -o " + output + (counter/n).to_s + ".tar "
-    if options[:verbose] then
-      imagestreams.each do | is |
-        puts "#{is}"
-      end
+  if ((i % n) == 0) then
+    if i > 0 then
+      options[:dryrun] ? printf("SYSTEM: %s\n",cmd) : system(cmd);
+      options[:dryrun]  ? printf("SYSTEM: %s\n", cmd2) : system(cmd2);
+      options[:dryrun]  ? printf("SYSTEM: %s\n\n", cmd3) : system(cmd3);
     end
-    imagestreams.map{ |val| cmd << val.delete("\n") << " " }
-    options[:dryrun] ? printf("SYSTEM: %s\n\n",cmd) : system(cmd);
-    imagestreams.clear()
+    c = (i / n)+1
+
+    printf("Creating tarball %d: isdump%d.tar.gz\n", c, c);
+    create_fname = output + c.to_s + ".tar"
+    cmd = "docker save -o " + create_fname
+    cmd2 = "tar -C `dirname " + output + "` -zcf " + create_fname + ".gz `basename " + create_fname + "`"
+    cmd3 = "rm " + create_fname
   end
+  i = i + 1
+
+  if options[:verbose] then
+    puts "#{line}"
+  end
+  cmd << " " << line.delete("\n")
+
 end
 
-counter=counter+1
-cmd = "docker save -o " + output + (counter/n + 1).to_s + ".tar "
-printf("Creating tarball %d: isdump%d.tar.gz\n", counter/n+1, counter/n+1);
-if options[:verbose] then
-  imagestreams.each do | is |
-    puts "#{is}"
-  end
-end
-imagestreams.map{ |val| cmd << val.delete("\n") << " " }
-options[:dryrun]  ? printf("SYSTEM: %s\n\n",cmd) : system(cmd);
-imagestreams.clear()
-
-file.close
+options[:dryrun] ? printf("SYSTEM: %s\n",cmd) : system(cmd);
+options[:dryrun]  ? printf("SYSTEM: %s\n", cmd2) : system(cmd2);
+options[:dryrun]  ? printf("SYSTEM: %s\n\n", cmd3) : system(cmd3);
