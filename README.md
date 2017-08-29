@@ -1,4 +1,5 @@
-# Dumps a list of required images for an installed version of OpenShift
+# OpenShift Parse, Pull & Dump
+Dumps tarballs of required images for a particular installed version of OpenShift. Used for importing images in disconnected environments.
 
 ### Requirements
 Machine that you run this script from must:
