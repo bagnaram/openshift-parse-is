@@ -1,4 +1,4 @@
-a list of required images for an installed version of OpenShift
+Dumps a list of required images for an installed version of OpenShift
 
 Directions
 
