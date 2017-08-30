@@ -51,10 +51,15 @@ end
  
 i = 0
 c=1.0
+cmd_pull = ""
 cmd = ""
 cmd2 = ""
 cmd3 = ""
 imagestreams.each do | line |
+
+  cmd_pull = "docker pull #{line}" 
+  cmd_pull += " >> /dev/null" if !options[:verbose] 
+  options[:dryrun] ? printf("SYSTEM: %s\n",cmd_pull) : system(cmd_pull);
 
   if ((i % n) == 0) then
     if i > 0 then
@@ -66,9 +71,18 @@ imagestreams.each do | line |
 
     printf("Creating tarball %d: isdump%d.tar.gz\n", c, c);
     create_fname = output + c.to_s + ".tar"
-    cmd = "docker save -o " + create_fname
-    cmd2 = "tar -C `dirname " + output + "` -zcf " + create_fname + ".gz `basename " + create_fname + "`"
-    cmd3 = "rm " + create_fname
+
+    # escape out if tarballs already exist!
+    if File.file?(create_fname + '.gz')
+      cmd = "echo Error: File #{create_fname} already exists! Skipping." 
+      cmd2 = ""
+      cmd3 = ""
+
+    else
+      cmd = "docker save -o #{create_fname}"
+      cmd2 = "tar -C `dirname #{output}` -zcf #{create_fname}.gz `basename #{create_fname}`"
+      cmd3 = "rm " + create_fname
+    end
   end
   i = i + 1
 
@@ -76,7 +90,6 @@ imagestreams.each do | line |
     puts "#{line}"
   end
   cmd << " " << line.delete("\n")
-
 end
 
 options[:dryrun] ? printf("SYSTEM: %s\n",cmd) : system(cmd);
