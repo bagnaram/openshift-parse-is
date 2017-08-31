@@ -9,11 +9,8 @@ Machine that you run this script from must:
 * Have openshift-ansible RPM installed
 * Have a recent install of Ruby
 
-<<<<<<< HEAD
-=======
 ### Directions
 ```
->>>>>>> 5e05a73ce1846a721ff95f5526fa90d527982954
 Usage: save-images.rb [options]
   -n, --number COUNT=10:  Number of images per tarball.
   -f, --filename FNAME: File containing image names. Defaults to running imageStreamParser
@@ -21,7 +18,6 @@ Usage: save-images.rb [options]
   -d, --dryrun: Just output commands, don't run.
   -v, --verbose Verbose output
   -h, --help: Prints this help.
-<<<<<<< HEAD
 
 1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
 
@@ -30,7 +26,6 @@ Usage: save-images.rb [options]
 When the script is finished you will see the tarballs available: 
 isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
 isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
-=======
 ```
 1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
 
@@ -41,7 +36,6 @@ When the script is finished you will see the tarballs available:
 isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
 isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
 ```
->>>>>>> 5e05a73ce1846a721ff95f5526fa90d527982954
 
 3. You can then burn them to DVD and import them for disconnected installs.
 
