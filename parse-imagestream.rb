@@ -20,3 +20,14 @@ else
   exit
 end
 
+
+  opts.on('-h', '--help', 'Prints this help.') { puts opts; exit }
+
+end.parse!
+
+parser = ImageStreamParser.new
+if parser.verifyStreams() then
+  parser.dumpStreams(tty=true)
+else
+  exit
+end

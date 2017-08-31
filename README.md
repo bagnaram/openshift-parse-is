@@ -1,8 +1,19 @@
-# openshift-parse-is
-Dumps a list of required images for an installed version of OpenShift
+# OpenShift Parse, Pull & Dump
+Dumps tarballs of required images for a particular installed version of OpenShift. Used for importing images in disconnected environments.
 
-Directions
+### Requirements
+Machine that you run this script from must:
+* Have sufficient storage for saving images
+* Have Docker installed along with sufficient docker storage for all the images.
+* Be subscribed to the appropriate OpenShift yum repositories
+* Have openshift-ansible RPM installed
+* Have a recent install of Ruby
 
+<<<<<<< HEAD
+=======
+### Directions
+```
+>>>>>>> 5e05a73ce1846a721ff95f5526fa90d527982954
 Usage: save-images.rb [options]
   -n, --number COUNT=10:  Number of images per tarball.
   -f, --filename FNAME: File containing image names. Defaults to running imageStreamParser
@@ -10,6 +21,7 @@ Usage: save-images.rb [options]
   -d, --dryrun: Just output commands, don't run.
   -v, --verbose Verbose output
   -h, --help: Prints this help.
+<<<<<<< HEAD
 
 1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
 
@@ -18,6 +30,18 @@ Usage: save-images.rb [options]
 When the script is finished you will see the tarballs available: 
 isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
 isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
+=======
+```
+1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
+
+2. Example: ruby save-imagestream.rb -o /opt/disk/isdump -n 15
+
+When the script is finished you will see the tarballs available: 
+```
+isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
+isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
+```
+>>>>>>> 5e05a73ce1846a721ff95f5526fa90d527982954
 
 3. You can then burn them to DVD and import them for disconnected installs.
 
