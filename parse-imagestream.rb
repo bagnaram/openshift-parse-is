@@ -14,20 +14,12 @@ OptionParser.new do |opts|
 end.parse!
 
 parser = ImageStreamParser.new
+imagestreams=[]
 if parser.verifyStreams() then
-  parser.dumpStreams(tty=true)
+  imagestreams = parser.dumpStreams()
 else
   exit
 end
 
+imagestreams.map{ | img | printf("%s\n", img) }
 
-  opts.on('-h', '--help', 'Prints this help.') { puts opts; exit }
-
-end.parse!
-
-parser = ImageStreamParser.new
-if parser.verifyStreams() then
-  parser.dumpStreams(tty=true)
-else
-  exit
-end

@@ -4,10 +4,11 @@ Dumps tarballs of required images for a particular installed version of OpenShif
 ### Requirements
 Machine that you run this script from must:
 * Have sufficient storage for saving images
-* Have Docker installed along with sufficient docker storage for all the images.
+* Have skopeo >= 0.1.23 installed
 * Be subscribed to the appropriate OpenShift yum repositories
 * Have openshift-ansible RPM installed
 * Have a recent install of Ruby
+* ruby-progressbar gem installed
 
 ### Directions
 ```

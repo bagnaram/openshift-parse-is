@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'rubygems'
+require 'ruby-progressbar'
 require 'optparse'
 require 'pp'
 require_relative 'imageStreamParser'
@@ -52,51 +53,65 @@ end
 i = 0
 c=1.0
 
-cmd_pull = ""
-cmd = ""
-cmd2 = ""
-cmd3 = ""
-imagestreams.each do | line |
+cmd_save = ""
+cmd_clean = ""
+cmd_tar = ""
+cmd_make = "mkdir -p #{output}TMP/"
 
-  cmd_pull = "docker pull #{line}" 
-  cmd_pull += " >> /dev/null" if !options[:verbose] 
-  options[:dryrun] ? printf("SYSTEM: %s\n",cmd_pull) : system(cmd_pull);
+options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+bar = ProgressBar.create(:format => '%t |%b>>%i| [%c/%C]', :title=> "Downloading", :total => imagestreams.size)
+
+
+imagestreams.each do | image |
+  is_name=image.scan(/.*?\/(.*):.*$/).last.first.sub('/','-')
+  is_tag=image.scan(/.*?\/.*:(.*)$/).last.first
+
+  if File.file?("#{output}TMP/#{is_name}-#{is_tag}.tar") then
+    cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}-#{is_tag}.tar, File exists." 
+  else
+    cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}-#{is_tag}.tar:#{image}"
+    cmd_save = cmd_save + " >> /dev/null" if !options[:verbose]
+  end
+  
+  options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_save) : system(cmd_save);
+
 
   if ((i % n) == 0) then
-    if i > 0 then
-      options[:dryrun] ? printf("SYSTEM: %s\n",cmd) : system(cmd);
-      options[:dryrun]  ? printf("SYSTEM: %s\n", cmd2) : system(cmd2);
-      options[:dryrun]  ? printf("SYSTEM: %s\n\n", cmd3) : system(cmd3);
-    end
     c = (i / n)+1
 
-    printf("Creating tarball %d: isdump%d.tar.gz\n", c, c);
-    create_fname = output + c.to_s + ".tar"
+#printf("Creating tarball %d: isdump%d.tar.gz\n", c, c);
+    create_fname = "#{output}#{c}.tar.gz"
     
-    cmd = "docker save -o " + create_fname
-    cmd2 = "tar -C `dirname " + output + "` -zcf " + create_fname + ".gz `basename " + create_fname + "`"
-    cmd3 = "rm " + create_fname
+    cmd_clean = "rm -rf #{output}TMP/"
 
     # escape out if tarballs already exist!
-    if File.file?(create_fname + '.gz')
-      cmd = "echo Error: File #{create_fname} already exists! Skipping." 
-      cmd2 = ""
-      cmd3 = ""
-
+    if File.file?(create_fname)
+      cmd_tar = "echo Cowardly refusing to create #{create_fname}, File exists." 
     else
-      cmd = "docker save -o #{create_fname}"
-      cmd2 = "tar -C `dirname #{output}` -zcf #{create_fname}.gz `basename #{create_fname}`"
-      cmd3 = "rm " + create_fname
+      cmd_tar = "tar -C #{output}TMP/ -zcf #{create_fname} #{output}TMP/"
+
+    end
+    if i > 0 then
+    bar.title="Compressing."
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+    bar.title="Downloading."
     end
   end
+
+
   i = i + 1
 
   if options[:verbose] then
-    puts "#{line}"
+    puts "#{image}"
   end
-  cmd << " " << line.delete("\n")
+  bar.increment
+
 end
 
-options[:dryrun] ? printf("SYSTEM: %s\n",cmd) : system(cmd);
-options[:dryrun]  ? printf("SYSTEM: %s\n", cmd2) : system(cmd2);
-options[:dryrun]  ? printf("SYSTEM: %s\n\n", cmd3) : system(cmd3);
+bar.title="Compressing."
+options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
+options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
+bar.title="All finished."
+

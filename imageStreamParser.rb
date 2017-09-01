@@ -59,9 +59,9 @@ class ImageStreamParser
     obj = JSON.parse(json)
 
     obj['items'].each do | image |
-      tty==true ? printf("%s:latest\n", image["spec"]["dockerImageRepository"]) : @images << image["spec"]["dockerImageRepository"]
+      @images << image["spec"]["dockerImageRepository"] + ":latest"
       image['spec']['tags'].each do | tag |
-        tty==true ? printf("%s:%s\n",image['spec']['dockerImageRepository'],tag['name']) : @images << image['spec']['dockerImageRepository'] + ":" + tag['name']
+        @images << image['spec']['dockerImageRepository'] + ":" + tag['name']
       end
     end
 
@@ -70,9 +70,9 @@ class ImageStreamParser
     obj = JSON.parse(json)
 
     obj['items'].each do | image |
-      tty==true ? printf("%s:latest\n", image["spec"]["dockerImageRepository"]) : @images << image["spec"]["dockerImageRepository"]
+      @images << image["spec"]["dockerImageRepository"] + ":latest"
       image['spec']['tags'].each do | tag |
-        tty==true ? printf("%s:%s\n",image['spec']['dockerImageRepository'],tag['name']) : @images << image['spec']['dockerImageRepository'] + ":" + tag['name']
+        @images << image['spec']['dockerImageRepository'] + ":" + tag['name']
       end
     end
 
@@ -83,7 +83,7 @@ class ImageStreamParser
     obj['items'].each do | image |
       image['spec']['tags'].each do | tag |
           if tag['from']['kind'] == 'DockerImage' then
-            tty==true ? printf("%s\n",tag['from']['name']) : @images << tag['from']['name']
+            @images << tag['from']['name']
           end
       end
     end
@@ -92,9 +92,9 @@ class ImageStreamParser
     getOadmVersion()
     @@additional_images=@@additional_images.map{ | img | img.gsub(/tag[12]/, 'tag1' => @@t1, 'tag2' => @@t2)}
     @@additional_images.each do |image|
-      tty==true ? puts("#{image}\n") : @images << image
+      @images << image
     end
-
+    @images = @images[0..2]
     return @images
   end
 
