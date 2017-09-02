@@ -27,6 +27,7 @@ Usage: save-images.rb [options]
 2. Example: ruby save-imagestream.rb -o /opt/disk/isdump -n 15
 
 When the script is finished you will see the tarballs available: 
+```
 isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
 isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
 ```
