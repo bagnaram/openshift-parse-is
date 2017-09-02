@@ -30,19 +30,10 @@ When the script is finished you will see the tarballs available:
 isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
 isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
 ```
-1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
-
-2. Example: ruby save-imagestream.rb -o /opt/disk/isdump -n 15
-
-When the script is finished you will see the tarballs available: 
-```
-isdump10.tar.gz  isdump2.tar.gz  isdump4.tar.gz  isdump6.tar.gz  isdump8.tar.gz
-isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
-```
 
 3. You can then burn them to DVD and import them for disconnected installs.
 
-You can also btain list of images from the script parse-imagestream.rb. You can then use this list to pull them directly from registry.access.redhat.com for use in disconnected installs.
+You can also obtain list of images from the script parse-imagestream.rb. You can then use this list to pull them directly from registry.access.redhat.com for use in disconnected installs.
 
 ### Importing images
 ```
