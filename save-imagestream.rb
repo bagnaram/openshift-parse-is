@@ -59,17 +59,17 @@ cmd_tar = ""
 cmd_make = "mkdir -p #{output}TMP/"
 
 options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
-bar = ProgressBar.create(:format => '%t |%b>>%i| [%c/%C]', :title=> "Downloading", :total => imagestreams.size)
+bar = ProgressBar.create(:format => '%t |%b>>%i| [%c/%C]', :title=> "Downloading", :total => imagestreams.size + 1)
 
 
 imagestreams.each do | image |
-  is_name=image.scan(/.*?\/(.*):.*$/).last.first.sub('/','-')
+  is_name=image.scan(/.*?\/(.*):.*$/).last.first.sub('/','_')
   is_tag=image.scan(/.*?\/.*:(.*)$/).last.first
 
   if File.file?("#{output}TMP/#{is_name}-#{is_tag}.tar") then
-    cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}-#{is_tag}.tar, File exists." 
+    cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}:#{is_tag}.tar, File exists." 
   else
-    cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}-#{is_tag}.tar:#{image}"
+    cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}:#{is_tag}.tar:#{image}"
     cmd_save = cmd_save + " >> /dev/null" if !options[:verbose]
   end
   
@@ -112,6 +112,15 @@ end
 
 bar.title="Compressing."
 options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
+bar.increment
 options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
+
+#File.open("#{output}/is.txt", "w+") do |f|
+#  imagestreams.each { |element| f.puts(element) }
+#end
+
 bar.title="All finished."
+puts "\n"
+
+
 

@@ -94,7 +94,7 @@ class ImageStreamParser
     @@additional_images.each do |image|
       @images << image
     end
-    @images = @images[0..2]
+    @images=@images[0..2]
     return @images
   end
 
