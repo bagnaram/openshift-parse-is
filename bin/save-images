@@ -3,7 +3,7 @@ require 'rubygems'
 require 'ruby-progressbar'
 require 'optparse'
 require 'pp'
-require_relative 'imageStreamParser'
+require 'imageStreamParser'
 
 options = {}
 OptionParser.new do |opts|
@@ -67,9 +67,9 @@ imagestreams.each do | image |
   is_tag=image.scan(/.*?\/.*:(.*)$/).last.first
 
   if File.file?("#{output}TMP/#{is_name}-#{is_tag}.tar") then
-    cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}:#{is_tag}.tar, File exists." 
+    cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}-TAGGED-#{is_tag}.tar, File exists." 
   else
-    cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}:#{is_tag}.tar:#{image}"
+    cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}_TAGGED_#{is_tag}.tar:#{image}"
     cmd_save = cmd_save + " >> /dev/null" if !options[:verbose]
   end
   

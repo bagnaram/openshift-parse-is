@@ -12,6 +12,9 @@ Machine that you run this script from must:
 
 ## Directions
 
+Simply build and install the gem.
+
+
 ### Exporting images
 ```
 Usage: save-images.rb [options]

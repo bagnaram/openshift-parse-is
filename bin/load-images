@@ -20,6 +20,11 @@ end.parse!
 options[:dir] != NIL ? directory = options[:dir] : directory="./"
 options[:registry] != NIL ? registry = options[:registry] : registry="localhost:5000"
 
+if !(directory =~ /\/$/ ) then
+    printf("Invalid path %s\n",directory)
+    exit
+end
+
 tarballs = Dir.entries("#{directory}").select { |f| f =~ /\.tar\.gz$/ }
 
 bar = ProgressBar.create(:format => '%t |%b>>%i| [%c/%C]', :title=> "Loading", :total => tarballs.size)
@@ -32,17 +37,23 @@ tarballs.each do | tarball |
   cmd_untar = "tar -C #{directory} -xf #{directory}#{tarball} --transform 's%#{regex}\\w*%TMP%'"
   options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_untar) : system(cmd_untar);
   
-  sub_tarballs = Dir.entries("#{directory}TMP/")
-  sub_tarballs.shift
-  sub_tarballs.shift
+  if !File.directory?("#{directory}TMP/") then
+    printf("Invalid tar file!\n")
+    next
+  end
+
+
+  sub_tarballs = Dir.entries("#{directory}TMP/").select { |f| f =~ /\.tar$/ }
   bar2 = ProgressBar.create(:format => '%t |%b>>%i| [%c/%C]', :title=> "Extracting", :total => sub_tarballs.size)
 
   sub_tarballs.each do  | sub_tarball |
 
     is = sub_tarball.sub('_','/')
+    is = is.sub("_TAGGED_",':')
     is = is.sub('.tar','')
 
-    cmd_load = "skopeo --tls-verify=false copy docker-archive:#{directory}/TMP/#{sub_tarball} docker://#{registry}/#{is}"
+    cmd_load = "skopeo copy --dest-tls-verify=false docker-archive:#{directory}/TMP/#{sub_tarball} docker://#{registry}/#{is}"
+    cmd_load = cmd_load + " >> /dev/null" if !options[:verbose]
     options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_load) : system(cmd_load);
 
     bar2.increment
@@ -58,4 +69,5 @@ end
 
 
 bar.title="All finished."
+puts("\n")
 
