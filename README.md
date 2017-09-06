@@ -4,6 +4,7 @@ Dumps tarballs of required images for a particular installed version of OpenShif
 ## Requirements
 *Tool will Fail if any of these are no met!*
 Machine that you run this script from must:
+* Running RPM-based distribution. Tested on RHEL7.4
 * Have sufficient storage for saving images
 * Have skopeo >= 0.1.23 installed
 * Be subscribed to the appropriate OpenShift yum repositories
