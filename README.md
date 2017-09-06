@@ -2,6 +2,7 @@
 Dumps tarballs of required images for a particular installed version of OpenShift. Used for importing images in disconnected environments.
 
 ## Requirements
+*Tool will Fail if any of these are no met!*
 Machine that you run this script from must:
 * Have sufficient storage for saving images
 * Have skopeo >= 0.1.23 installed
@@ -25,9 +26,9 @@ Usage: save-images.rb [options]
   -v, --verbose Verbose output
   -h, --help: Prints this help.
 ```
-1. Simply run save-images.rb from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
+1. Simply run `save-images.rb` from a machine with openshift-ansible RPM installed. This is most likely one of your master nodes.
 
-2. Example: ruby save-imagestream.rb -o /opt/disk/isdump -n 15
+2. Example: `ruby save-imagestream.rb -o /opt/disk/isdump -n 15`
 
 When the script is finished you will see the tarballs available: 
 ```
@@ -37,7 +38,7 @@ isdump1.tar.gz   isdump3.tar.gz  isdump5.tar.gz  isdump7.tar.gz  isdump9.tar.gz
 
 3. You can then burn them to DVD and import them for disconnected installs.
 
-You can also obtain list of images from the script parse-imagestream.rb. You can then use this list to pull them directly from registry.access.redhat.com for use in disconnected installs.
+You can also obtain list of images from the script `parse-imagestream.rb`. You can then use this list to pull them directly from registry.access.redhat.com for use in disconnected installs.
 
 ### Importing images
 ```
@@ -49,8 +50,8 @@ Usage: load-images.rb [options]
   -h --help: Prints this help.
 ```
 
-1. Simply run load-images.rb from the environment you would like to import your images.
+1. Simply run `load-images.rb` from the environment you would like to import your images.
 
-2. Example: ruby load-images.rb -D /opt/disk/ -r localhost:5000
+2. Example: `ruby load-images.rb -D /opt/disk/ -r localhost:5000`
 
 When the script completes, the images will be pushed into the specified Docker registry.
