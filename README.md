@@ -13,8 +13,13 @@ Machine that you run this script from must:
 
 ## Directions
 
-Simply build and install the gem.
+Simply build and install the gem. 
 
+The machine you run the export script `save-images` must be connected to the internet! This machine will require the above packages to be installed, because the OpenShift Docker images are version specific. This OCP version must exactly match the version that you are importing to! For this script to be useful, it is important to maintain this parity.
+
+The export script wil create a bunch of tarballs in the destination directory. These are now portable and can be taken to your disconnected environment.
+
+The machine that you run `load-images` will also need skopeo installed. However, it does *Not* need docker to be installed. It can push images to a local disconnected registry, or to one reachable on your disconnected network.
 
 ### Exporting images
 ```
@@ -55,3 +60,6 @@ Usage: load-images.rb [options]
 2. Example: `ruby load-images.rb -D /opt/disk/ -r localhost:5000`
 
 When the script completes, the images will be pushed into the specified Docker registry.
+
+### To-do
+* Ability to push and pull from secured registries
