@@ -88,7 +88,7 @@ imagestreams.each do | image |
     if File.file?(create_fname)
       cmd_tar = "echo Cowardly refusing to create #{create_fname}, File exists." 
     else
-      cmd_tar = "tar -C #{output}TMP/ -zcf #{create_fname} #{output}TMP/"
+      cmd_tar = "tar -zcf #{create_fname} #{output}TMP/ --transform 's%#{output}TMP/%%'"
 
     end
     if i > 0 then

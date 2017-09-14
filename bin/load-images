@@ -34,7 +34,9 @@ tarballs.each do | tarball |
   regex = directory.clone
   regex[0]='' if  regex[0]=='/' 
 
-  cmd_untar = "tar -C #{directory} -xf #{directory}#{tarball} --transform 's%#{regex}\\w*%TMP%'"
+  cmd_untar = "tar -C #{directory}TMP/ -xf #{directory}#{tarball} "
+  cmd_prepare = "mkdir -p #{directory}TMP"
+  options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_prepare) : system(cmd_prepare);
   options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_untar) : system(cmd_untar);
   
   if !File.directory?("#{directory}TMP/") then
@@ -61,7 +63,7 @@ tarballs.each do | tarball |
 
   end
   cmd_clean = "rm -rf #{directory}/TMP/"
-#options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
+  options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
   bar.increment
 
 
