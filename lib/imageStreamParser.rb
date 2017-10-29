@@ -8,7 +8,6 @@ class ImageStreamParser
   @@streams = ['/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/xpaas-streams/jboss-image-streams.json', 
              '/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/xpaas-streams/fis-image-streams.json',
              '/usr/share/ansible/openshift-ansible/roles/openshift_examples/files/examples/v1.4/image-streams/image-streams-rhel7.json']
-  @images = []
 
   @@additional_images = ['registry.access.redhat.com/openshift3/ose-haproxy-router:tag1',
                          'registry.access.redhat.com/openshift3/ose-deployer:tag1',
@@ -17,6 +16,8 @@ class ImageStreamParser
                          'registry.access.redhat.com/openshift3/ose-docker-builder:tag1',
                          'registry.access.redhat.com/openshift3/ose-pod:tag1',
                          'docker.io/openshift/hello-openshift:latest',
+                         'registry.access.redhat.com/openshift3/image-inspector:latest',
+                         'registry.access.redhat.com/openshift3/registry-console:3.4-30',
                          'registry.access.redhat.com/openshift3/ose-docker-registry:tag1',
                          'registry.access.redhat.com/openshift3/logging-deployer:tag2',
                          'registry.access.redhat.com/openshift3/logging-elasticsearch:tag2',

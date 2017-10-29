@@ -53,9 +53,12 @@ end
 i = 0
 c=1.0
 
-cmd_save = ""
-cmd_clean = ""
-cmd_tar = ""
+cmd_save   = ""
+cmd_clean  = ""
+cmd_tar    = ""
+
+image_list = ""
+
 cmd_make = "mkdir -p #{output}TMP/"
 
 options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
@@ -70,6 +73,7 @@ imagestreams.each do | image |
     cmd_save = "echo Cowardly refusing to create #{output}TMP/#{is_name}-TAGGED-#{is_tag}.tar, File exists." 
   else
     cmd_save = "skopeo copy docker://#{image} docker-archive:#{output}TMP/#{is_name}_TAGGED_#{is_tag}.tar:#{image}"
+    image_list << "#{is_name}:#{is_tag}\n"
     cmd_save = cmd_save + " >> /dev/null" if !options[:verbose]
   end
   
@@ -96,6 +100,10 @@ imagestreams.each do | image |
       options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
       options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
       options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+      File.open("#{create_fname}.txt", 'w') {|f| f.write(image_list) };
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+      image_list=""
+
     bar.title="Downloading."
     end
   end

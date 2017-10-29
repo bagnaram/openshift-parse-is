@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name        = 'ocp-ppd'
-  s.version     = '0.1.0'
+  s.version     = '0.2.0'
   s.executables = [ 'save-images', 'load-images', 'parse-imagestreams']
-  s.date        = '2017-09-02'
+  s.date        = '2017-10-27'
   s.summary     = "ocp-ppd!"
   s.description = "Dumps tarballs of required images for a particular installed version of OpenShift. Used for importing images in disconnected environments."
   s.authors     = ["Matt Bagnara"]
