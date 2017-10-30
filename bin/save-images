@@ -51,7 +51,7 @@ end
 
  
 i = 0
-c=1.0
+c = 1.0
 
 cmd_save   = ""
 cmd_clean  = ""
@@ -84,7 +84,7 @@ imagestreams.each do | image |
     c = (i / n)+1
 
 #printf("Creating tarball %d: isdump%d.tar.gz\n", c, c);
-    create_fname = "#{output}#{c}.tar.gz"
+    create_fname = "#{output}#{'%02d' % (c-1)}.tar.gz"
     
     cmd_clean = "rm -rf #{output}TMP/"
 
@@ -97,11 +97,11 @@ imagestreams.each do | image |
     end
     if i > 0 then
     bar.title="Compressing."
-      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
-      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
-      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar)    : system(cmd_tar);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean)  : system(cmd_clean);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make)   : system(cmd_make);
       File.open("#{create_fname}.txt", 'w') {|f| f.write(image_list) };
-      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make) : system(cmd_make);
+      options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_make)   : system(cmd_make);
       image_list=""
 
     bar.title="Downloading."
@@ -123,12 +123,6 @@ options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_tar) : system(cmd_tar);
 bar.increment
 options[:dryrun] ? printf("  SYSTEM: %s\n",cmd_clean) : system(cmd_clean);
 
-#File.open("#{output}/is.txt", "w+") do |f|
-#  imagestreams.each { |element| f.puts(element) }
-#end
-
 bar.title="All finished."
 puts "\n"
-
-
 
